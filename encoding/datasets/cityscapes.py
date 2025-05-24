@@ -44,6 +44,10 @@ class CitySegmentation(BaseDataset):
             return img, os.path.basename(self.images[index])
         
         mask = Image.open(self.masks[index])
+
+        img = img.resize((128, 128), Image.BILINEAR)  # Resize image to 128x128
+        mask = mask.resize((128, 128), Image.NEAREST)  # Resize mask to 128x128 (NEAREST preserves labels)
+        
         # synchrosized transform
         if self.mode == 'train':
             img, mask = self._sync_transform(img, mask)
